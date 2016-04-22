@@ -1,21 +1,24 @@
 import Koa from 'koa';
+import httpProxy from './common/http_proxy';
 import {
-	read_host
-} from './common/host_data';
+	getHost
+} from './common/mem_cache';
+
 
 const app = new Koa();
 
 app.use( async ctx => {
 
-	var source = await read_host( {
-		host: 'ygm.fedevot.meilishuo.com'
-	} );
+	if ( ctx.url == '/favicon.ico' ) {
+		return ctx.body = '';
+	}
 
-	console.log( source[ 0 ] );
+	var source = await getHost( ctx.headers.host );
 
-	ctx.body = 'xxx'
+	httpProxy( source, ctx );
+
 } );
 
 app.listen( Conf.hornbillPort );
 
-console.log( `server listen on http://127.0.0.1:${Conf.hornbillPort}` );
+console.log( `server(hornbill) listen on http://127.0.0.1:${Conf.hornbillPort}` );

@@ -2,6 +2,10 @@ import {
     connect
 } from 'orm';
 
+import {
+    delHsot
+} from './mem_cache';
+
 const hostData = {
     "id": {
         type: 'serial',
@@ -13,9 +17,9 @@ const hostData = {
     "port": String
 }
 
-const conn = Promise.promisify( connect );
+let conn = Promise.promisify( connect );
 
-const get_table = cb => {
+let getTable = cb => {
     return conn( Conf.mysql ).then( db => {
         let table = db.define( 'hostData', hostData );
         return cb( table ).then( data => {
@@ -25,26 +29,44 @@ const get_table = cb => {
     } )
 }
 
-const read_host = filter => {
-    return get_table( function ( table ) {
-        let find = Promise.promisify( table.find );
+let readHost = filter => {
+    return getTable( function ( table ) {
+        let find = Promise.promisify( table.find ).bind( table );
         return find( filter );
     } )
 }
 
-const create_host = data => {
-    return get_table( function ( table ) {
-        let create = Promise.promisify( table.create );
+let createHost = data => {
+    return getTable( function ( table ) {
+        let create = Promise.promisify( table.create ).bind( table );
         return create( data );
     } )
 }
 
-const update_host = data => {
+let updateHost = ( condition, data, isCreate ) => {
+    return getTable( function ( table ) {
+        let one = Promise.promisify( table.one ).bind( table );
+        return one( condition ).then( updateData => {
+            if ( updateData ) {
+                return delHsot( data.host ).then( () => {
+                    return updateData.save( data );
+                } );
+            } else if ( isCreate ) {
+                return createHost( data );
+            }
+        } ).catch( err => {
+            console.log( err );
+        } )
+    } )
+}
 
+let saveHost = ( condition, data ) => {
+    return updateHost( condition, data, true )
 }
 
 export {
-    read_host,
-    create_host,
-    update_host
+    readHost,
+    createHost,
+    updateHost,
+    saveHost
 }

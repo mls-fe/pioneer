@@ -1,10 +1,18 @@
 import Koa from 'koa';
-const app = new Koa();
+import Router from 'koa-router';
+import {
+	setRouters
+} from './logic/local_routers';
 
-app.use( ctx => {
-	ctx.body = 'Hello World 1236';
-} );
+const app = new Koa();
+const router = Router();
+
+setRouters( router );
+
+app
+	.use( router.routes() )
+	.use( router.allowedMethods() );
 
 app.listen( Conf.serverPort );
 
-console.log( `server listen on http://127.0.0.1:${Conf.serverPort}` );
+console.log( `server(local) listen on http://127.0.0.1:${Conf.serverPort}` );

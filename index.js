@@ -1,6 +1,6 @@
 require( 'babel-core/register' );
 
-global.Conf = require( './conf' ).conf;
+global.Conf = require( './conf' ).default;
 global.Promise = require( "bluebird" );
 
 const cluster = require( 'cluster' );
