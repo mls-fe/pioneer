@@ -1,4 +1,4 @@
-require( 'babel-core/register' );
+require( 'babel-register' );
 
 global.Conf = require( './conf.json' );
 global.Promise = require( "bluebird" );
