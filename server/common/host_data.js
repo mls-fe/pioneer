@@ -31,21 +31,27 @@ let getTable = cb => {
 
 let readHost = filter => {
     return getTable( function ( table ) {
-        let find = Promise.promisify( table.find ).bind( table );
+        let find = Promise.promisify( table.find, {
+            context: table
+        } );
         return find( filter );
     } )
 }
 
 let createHost = data => {
     return getTable( function ( table ) {
-        let create = Promise.promisify( table.create ).bind( table );
+        let create = Promise.promisify( table.create, {
+            context: table
+        } );
         return create( data );
     } )
 }
 
 let updateHost = ( condition, data, isCreate ) => {
     return getTable( function ( table ) {
-        let one = Promise.promisify( table.one ).bind( table );
+        let one = Promise.promisify( table.one, {
+            context: table
+        } );
         return one( condition ).then( updateData => {
             if ( updateData ) {
                 return delHsot( data.host ).then( () => {

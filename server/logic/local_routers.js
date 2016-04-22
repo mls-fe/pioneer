@@ -13,6 +13,14 @@ let getIp = ( ip ) => {
 	return ip.replace( '::ffff:', '' );
 }
 
+const formatStruct = ( data, code, msg ) => {
+	return {
+		code: code || 0,
+		data: data || '',
+		msg: msg || 'ok'
+	}
+}
+
 export let setRouters = router => {
 
 	router.get( '/', ( ctx, next ) => {
@@ -20,14 +28,14 @@ export let setRouters = router => {
 	} )
 
 	router.get( '/ip', ( ctx, next ) => {
-		ctx.body = getIp( ctx.ip );
+		ctx.body = formatStruct( getIp( ctx.ip ) );
 	} )
 
 	router.get( '/clearDomainCache', ( ctx, next ) => {
 		return delHsot( {
 			host: ctx.query.host
 		} ).then( () => {
-			ctx.body = 'ok';
+			ctx.body = formatStruct();
 		} )
 	} )
 
@@ -35,7 +43,7 @@ export let setRouters = router => {
 		return readHost( {
 			ukey: ctx.query.ukey
 		} ).then( data => {
-			ctx.body = data
+			ctx.body = formatStruct( data )
 		} )
 	} )
 
@@ -44,7 +52,7 @@ export let setRouters = router => {
 		let hosts = [].concat( query.host );
 
 		if ( !query.host || !query.port || !query.ukey ) {
-			return ctx.body = "param lose~";
+			return ctx.body = formatStruct( null, -1, "param lose~" );
 		}
 
 		hosts = hosts.map( item => {
@@ -60,7 +68,7 @@ export let setRouters = router => {
 		} );
 
 		return Promise.all( hosts ).then( data => {
-			ctx.body = data
+			ctx.body = formatStruct( data )
 		} );
 	} )
 
@@ -93,17 +101,11 @@ export let setRouters = router => {
 				} )
 
 				return Promise.all( upHosts ).then( () => {
-					ctx.body = {
-						code: 0,
-						updated: upHosts
-					}
+					ctx.body = formatStruct( upHosts )
 				} )
 
 			} else {
-				ctx.body = {
-					code: -1,
-					msg: 'not configed'
-				}
+				ctx.body = formatStruct( null, -1, 'not configed' )
 			}
 		} )
 	} )

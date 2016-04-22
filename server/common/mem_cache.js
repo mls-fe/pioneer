@@ -7,9 +7,15 @@ import {
 
 let memcached = new Memcached( Conf.memcached );
 
-let memGet = Promise.promisify( memcached.get ).bind( memcached );
-let memDel = Promise.promisify( memcached.del ).bind( memcached );
-let memSet = Promise.promisify( memcached.set ).bind( memcached );
+let memGet = Promise.promisify( memcached.get, {
+	context: memcached
+} )
+let memDel = Promise.promisify( memcached.del, {
+	context: memcached
+} )
+let memSet = Promise.promisify( memcached.set, {
+	context: memcached
+} )
 
 let prefix = 'pioneer';
 
