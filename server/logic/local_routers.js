@@ -55,7 +55,7 @@ export let setRouters = router => {
 				host: host
 			}, {
 				host: host,
-				ip: ctx.ip,
+				ip: query.ip || ctx.ip,
 				port: query.port,
 				ukey: query.ukey
 			} )
@@ -66,24 +66,21 @@ export let setRouters = router => {
 		} );
 	} )
 
-	// 根据mac地址更新ip
+	// 根据mac地址更新ip与端口
 	router.get( '/update', ctx => {
 
 		return readHost( {
 			ukey: ctx.query.ukey
 		} ).then( hosts => {
-			let curIp = ctx.query.ip || ctx.ip;
 			let upHosts = [];
 
 			if ( hosts.length ) {
 				hosts.forEach( item => {
-					if ( item.ip != curIp ) {
-						upHosts.push( {
-							host: item.host,
-							ip: curIp,
-							port: item.port
-						} )
-					}
+					upHosts.push( {
+						host: item.host,
+						ip: ctx.query.ip || ctx.ip,
+						port: ctx.query.port || item.port
+					} )
 				} )
 
 				let allUp = [];
