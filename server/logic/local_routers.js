@@ -13,7 +13,7 @@ let getIp = ( ip ) => {
 	return ip.replace( '::ffff:', '' );
 }
 
-const formatStruct = ( data, code, msg ) => {
+let formatStruct = ( data, code, msg ) => {
 	return {
 		code: code || 0,
 		data: data || '',
@@ -39,7 +39,7 @@ export let setRouters = router => {
 		} )
 	} )
 
-	router.get( '/ukey', ctx => {
+	router.get( '/hostlist', ctx => {
 		return readHost( {
 			ukey: ctx.query.ukey
 		} ).then( data => {
