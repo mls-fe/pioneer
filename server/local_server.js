@@ -9,6 +9,8 @@ const router = Router();
 
 setRouters( router );
 
+app.proxy = true;
+
 app
 	.use( router.routes() )
 	.use( router.allowedMethods() );

@@ -9,10 +9,6 @@ import {
 } from '../common/mem_cache';
 
 
-let getIp = ( ip ) => {
-	return ip.replace( '::ffff:', '' );
-}
-
 let formatStruct = ( data, code, msg ) => {
 	return {
 		code: code || 0,
@@ -28,7 +24,7 @@ export let setRouters = router => {
 	} )
 
 	router.get( '/ip', ( ctx, next ) => {
-		ctx.body = formatStruct( getIp( ctx.ip ) );
+		ctx.body = formatStruct( ctx.ip );
 	} )
 
 	router.get( '/clearDomainCache', ( ctx, next ) => {
@@ -59,7 +55,7 @@ export let setRouters = router => {
 				host: host
 			}, {
 				host: host,
-				ip: getIp( ctx.ip ),
+				ip: ctx.ip,
 				port: query.port,
 				ukey: query.ukey
 			} )
@@ -76,7 +72,7 @@ export let setRouters = router => {
 		return readHost( {
 			ukey: ctx.query.ukey
 		} ).then( hosts => {
-			let curIp = ctx.query.ip || getIp( ctx.ip );
+			let curIp = ctx.query.ip || ctx.ip;
 			let upHosts = [];
 
 			if ( hosts.length ) {
