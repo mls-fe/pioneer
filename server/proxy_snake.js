@@ -16,7 +16,6 @@ app.use( async ctx => {
 
 	//TODO 废掉之前fake方式，新的集成mock 
 
-	ctx.headers.host = targetHost;
 	delete ctx.req.headers.targetend;
 	delete ctx.req.headers.snakeproxy;
 	// delete ctx.req.headers[ 'accept-encoding' ];
@@ -33,6 +32,9 @@ app.use( async ctx => {
 	if ( snakeProxy.target ) {
 		targetHost = source[ '__' ].replace( '%0', snakeProxy.target );
 	}
+
+	// 挂载host
+	ctx.headers.host = targetHost;
 
 	httpProxy( {
 		host: targetHost
