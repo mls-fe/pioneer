@@ -32,9 +32,7 @@ export let setRouters = router => {
 	} )
 
 	router.get( '/clearDomainCache', ( ctx, next ) => {
-		return delHsot( {
-			host: ctx.query.host
-		} ).then( () => {
+		return delHsot( ctx.query.host ).then( () => {
 			ctx.body = formatStruct();
 		} )
 	} )

@@ -10,7 +10,7 @@ let httpProxy = ( source, ctx ) => {
 	let request_timer;
 	let backTimeoutTTL = 20000;
 	let options = {
-		host: source.ip,
+		host: source.host,
 		port: source.port || 80,
 		headers: thisReq.headers,
 		path: thisReq.url,

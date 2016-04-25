@@ -1,9 +1,9 @@
 {
 	"cupNums": 2,
 	"secret": "pioneer",
-	"serverPort": 8071,
-	"hornbillPort": 8072,
-	"snakePort": 8073,
+	"serverPort": 2018,
+	"hornbillPort": 3102,
+	"snakePort": 2013,
 
 	"mysql": "mysql://root:mlsyfyf123@172.18.16.21:3306/local_hornbill",
 	"memcached": "172.18.16.21:11211",

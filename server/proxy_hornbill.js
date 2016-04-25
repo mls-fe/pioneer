@@ -15,7 +15,10 @@ app.use( async ctx => {
 
 	var source = await getHost( ctx.headers.host );
 
-	httpProxy( source, ctx );
+	httpProxy( {
+		host: source.ip,
+		port: source.port
+	}, ctx );
 
 } );
 
